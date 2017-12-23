@@ -7,16 +7,13 @@ function isingplmdca(filename::AbstractString;
                     verbose::Bool=true,
                     method::Symbol=:LD_LBFGS)
 
-
     spin = readdlm(filename,Int)
-
     N,M = size(spin)
     plmalg = PlmAlg(method, verbose, epsconv, maxit, maxeval)
     plmvar = PlmVar(M, N, lambdaJ, lambdaH, spin)
-    maximizeplmdca(plmalg,plmvar)
-    
-#    DJ, DH,outJ,outH, pslike = maximizeplmdca(plmalg,plmvar, J0, H0)    
-#    PlmOut(sdata(pslike),DJ,DH, outJ, outH)
+    outJ, outh, vecps=maximizeplmdca(plmalg,plmvar)
+    return PlmOut(sdata(vecps),outJ,outh)
+
 end
 
 function optimfunwrapper(x::Vector, g::Vector, site, var)
@@ -25,15 +22,11 @@ function optimfunwrapper(x::Vector, g::Vector, site, var)
 end
 
 
-
 function maximizeplmdca(alg::PlmAlg, var::PlmVar)
 
     @extract var M N lambdaJ lambdaH spin
-    @extract alg method verbose epsconv maxit maxeval 
-    
-    
+    @extract alg method verbose epsconv maxit maxeval
     vecps = SharedArray{Float64}(N)
-    
     x0 = fill(0.0,N)
     Jscra = @parallel hcat for i in 1:N
         opt = Opt(method,N)
@@ -51,10 +44,10 @@ function maximizeplmdca(alg::PlmAlg, var::PlmVar)
     return outJ, outh, vecps
 end
 
-function computeH(vecJ::Vector{Float64}, site::Int, spin, a::Int,  N::Int)    
-    Hi = vecJ[end] # the i-th field
+function computeH(vecJ::Vector{Float64}, site::Int, spin, a::Int,  N::Int)
     ctr = 0
     # begin hi
+    Hi = vecJ[end] # the i-th field
     for i=1:site-1
         ctr += 1
         Hi += vecJ[ctr] * spin[i,a]
@@ -74,7 +67,6 @@ function L2norm(v::Vector, var::PlmVar)
     end       
     return lambdaJ*mysum + lambdaH*v[end]^2 
 end
-
 
 function grad!(grad::Vector{Float64}, spin, N::Int, Hi::Float64, site::Int, a::Int)
 
@@ -96,12 +88,16 @@ function plmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, site::Int, v
     @extract var M N lambdaJ lambdaH 
     spin = sdata(var.spin)
     pl = 0.0
+
+    for i in 1:N-1
+        grad[i] = 2 * lambdaJ * vecJ[i] * M
+    end
+    grad[N] += 2 * lambdaH * vecJ[N] * M
+
     @inbounds for a=1:M
         Hi = computeH(vecJ, site, spin, a, N)        
         pl += -log(1.0 +exp(-2.0*spin[site,a]*Hi))
         grad!(grad, spin, N, Hi, site, a)
-        for i in 1:N-1 grad[i] += 2 * lambdaJ * vecJ[i] end
-        grad[N] += 2 * lambdaJ * vecJ[N] 
     end
     scale!(grad, 1.0/M )
     pl /= M
