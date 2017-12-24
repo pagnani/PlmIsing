@@ -17,8 +17,8 @@ function isingplmdca(filename::AbstractString;
 end
 
 function optimfunwrapper(x::Vector, g::Vector, site, var)
-    g === nothing && (g = zeros(Float64, length(x)))
-    return plmsitegrad!(x, g, site,  var)
+    g === nothing && (g = zeros(Float64, length(x)))    
+    return plmsitegrad!(x, g, site,  var)   
 end
 
 
@@ -60,19 +60,26 @@ function computeH(vecJ::Vector{Float64}, site::Int, spin, a::Int,  N::Int)
 end
 
 function L2norm(v::Vector, var::PlmVar)
+
+    #pl = pl0 - lambdaJ |J|₂ - lambdaH |H|₂
     @extract var N lambdaJ lambdaH
     mysum = 0
     for i=1:N-1
         mysum += v[i]^2
     end       
-    return lambdaJ*mysum + lambdaH*v[end]^2 
+    return -lambdaJ*mysum - lambdaH*v[end]^2  
 end
 
 function grad!(grad::Vector{Float64}, spin, N::Int, Hi::Float64, site::Int, a::Int)
 
-    factor = 2.0 * spin[site,a] * exp(-2.0*Hi*spin[site,a]) / (1.0 + exp(-2Hi*spin[site,a]))    
-    ctr = 0
+    exponent = -2.0*Hi*spin[site,a]
 
+    factor = 1.0
+    if exponent < 500.0
+        factor = 2.0 * spin[site,a] * exp(exponent) / (1.0 + exp(exponent))
+    end
+    
+    ctr = 0    
     for i=1:site-1
         ctr += 1
         grad[ctr] += spin[i,a] * factor
@@ -86,19 +93,26 @@ end
 
 function plmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, site::Int, var::PlmVar)
     @extract var M N lambdaJ lambdaH 
+
     spin = sdata(var.spin)
     pl = 0.0
 
     for i in 1:N-1
-        grad[i] = 2 * lambdaJ * vecJ[i] * M
+        grad[i] = -2 * lambdaJ * vecJ[i] * M
     end
-    grad[N] += 2 * lambdaH * vecJ[N] * M
+    grad[N] += -2 * lambdaH * vecJ[N] * M
 
     @inbounds for a=1:M
         Hi = computeH(vecJ, site, spin, a, N)        
-        pl += -log(1.0 +exp(-2.0*spin[site,a]*Hi))
+        exponent = -2.0*spin[site,a]*Hi
+        plterm = -exponent
+        if exponent < 700.0
+            plterm = -log(1.0 +exp(-2.0*spin[site,a]*Hi))
+        end
+
+        pl += plterm
         grad!(grad, spin, N, Hi, site, a)
-    end
+    end    
     scale!(grad, 1.0/M )
     pl /= M
     pl += L2norm(vecJ, var)
