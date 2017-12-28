@@ -29,11 +29,11 @@ It requires the installation of:
    
 * [NLopt.jl](https://github.com/JuliaOpt/NLopt.jl).
 ```
-julia> Pkg.add("NLopt")(https://github.com/JuliaOpt/NLopt.jl)
+julia> Pkg.add("NLopt")
 ```
-* [ExtractMacro.jl]
+* [ExtractMacro.jl](https://github.com/carlobaldassi/ExtractMacro.jl)
 ```
-julia> Pkg.add("ExtractMacro")(https://github.com/carlobaldassi/ExtractMacro.jl)
+julia> Pkg.add("ExtractMacro")
 ```
 
 Script
