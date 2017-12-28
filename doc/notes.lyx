@@ -1,0 +1,408 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 501
+\begin_document
+\begin_header
+\origin unavailable
+\textclass revtex4-1
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+One body Pseudolikelihood
+\end_layout
+
+\begin_layout Standard
+Let us consider a system N of Ising variables 
+\begin_inset Formula $\mathbf{s}=\{s_{i}\}_{i=1,\dots,N}$
+\end_inset
+
+ with 
+\begin_inset Formula $s_{i}\in\pm1$
+\end_inset
+
+.
+ As usual the
+\end_layout
+
+\begin_layout Standard
+Boltzmann-Gibbs measure reads:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+P(\mathbf{s})=\frac{1}{Z}\exp\left(\sum_{1\leq i<j\leq N}J_{ij}s_{i}s_{j}+\sum_{i=1}^{N}h_{i}s_{i}\right)\label{eq:gibbs}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula $Z$
+\end_inset
+
+ is the partition function.
+ We are now interested to evaluate the marginal probability distribution
+ function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+P_{i}(s_{i}|s_{\backslash i})=\frac{e^{s_{i}\left(\sum_{j\neq i}J_{ij}s_{j}+h_{i}\right)}}{e^{\sum_{j\neq i}J_{ij}s_{j}+h_{i}}+e^{-\sum_{j\neq i}J_{ij}s_{j}-h_{i}}}=\frac{e^{H_{i}(s_{\backslash i})s_{i}}}{e^{H_{i}(s_{\backslash i})}+e^{-H_{i}(s_{\backslash i})}}=\frac{1}{1+e^{-2s_{i}H_{i}(s_{\backslash i})}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where we defined the effective total field acting on site 
+\begin_inset Formula $i$
+\end_inset
+
+ as 
+\begin_inset Formula $H_{i}(s_{\backslash i}):=\sum_{j\neq i}J_{ij}s_{j}+h_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and 
+\begin_inset Formula $\backslash i:=\{1,\dots,i-1,i+i,\dots,N\}$
+\end_inset
+
+, and we used the following relation that holds for an Ising variable 
+\begin_inset Formula $s\in\pm1$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{e^{As}}{e^{A}+e^{-A}}=\frac{1}{1+e^{-2sA}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is perhaps interesting to note that, due to Bayes theorem, 
+\begin_inset Formula $P(\mathbf{s})=P(s_{i}|s_{\backslash i})P(s_{\backslash i})$
+\end_inset
+
+ and so:
+\begin_inset Formula 
+\begin{eqnarray*}
+m_{i} & = & \langle s_{i}\rangle=\sum_{\mathbf{s}}P(\mathbf{s})s_{i}=\sum_{s_{i}=\pm1}\sum_{s_{\backslash i}}P(s_{i}|s_{\backslash i})P(s_{\backslash i})s_{i}\\
+ & = & \sum_{s_{\backslash i}}P(s_{\backslash i})\frac{e^{H_{i}(s_{\backslash i})}-e^{-H_{i}(s_{\backslash i})}}{e^{H_{i}(s_{\backslash i})}+e^{-H_{i}(s_{\backslash i})}}=\langle\tanh(H_{i}(s_{\backslash i})\rangle
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which is an exact relation.
+\end_layout
+
+\begin_layout Standard
+Now suppose that we have 
+\begin_inset Formula $M$
+\end_inset
+
+ configurations 
+\begin_inset Formula $s^{\alpha}\ensuremath{,}\alpha\in1,\dots,M$
+\end_inset
+
+, extracted (e.g.
+ using a Monte Carlo simulation) from the measure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:gibbs"
+
+\end_inset
+
+.
+ The (logarithm) of the pseudo-likelihood 
+\begin_inset Formula $L_{i}$
+\end_inset
+
+ can be computed as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+L_{i}:=\ln\prod_{\alpha=1}^{M}P(s_{i}^{\alpha}|s_{\backslash i}^{\alpha})=-\sum_{\alpha=1}^{M}\ln\left(1+e^{-2s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}\right)\label{eq:plising}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now aim at maximizing Eq.(
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:plising"
+
+\end_inset
+
+) with respect to the Hamiltonian parameters 
+\begin_inset Formula $J,h$
+\end_inset
+
+.
+ The stationary point in general can only be computed by using some kind
+ of local gradient-based minimization.
+ To do so we need to compute explicitly the partial derivative of Eq.(
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:plising"
+
+\end_inset
+
+) with respect each component of the Hamiltonian parameters (i.e.
+ the gradient of the pseudo-likelihood with respect of its parameters)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{dL_{i}}{dh_{i}} & = & \sum_{\alpha=1}^{M}\frac{2s_{i}^{\alpha}e^{-2s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}{1+e^{-2s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}=\sum_{\alpha=1}^{M}\frac{s_{i}^{\alpha}e^{s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}{\cosh(H_{i}(s_{\backslash i}^{\alpha}))}\\
+\frac{dL_{i}}{dJ_{ik}} & = & \sum_{\alpha=1}^{M}\frac{2s_{i}^{\alpha}s_{k}^{\alpha}e^{-2s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}{1+e^{-2s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}=\sum_{\alpha=1}^{M}\frac{s_{i}^{\alpha}s_{j}^{\alpha}e^{s_{i}^{\alpha}H_{i}(s_{\backslash i}^{\alpha})}}{\cosh(H_{i}(s_{\backslash i}^{\alpha}))}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Two body Pseudolikelihood
+\end_layout
+
+\begin_layout Standard
+We are now interested to evaluate the two point marginal probability distributio
+n function:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+P_{ij}(s_{i}s_{j}|s_{\backslash ij})=\frac{e^{s_{i}\left(\sum_{k\neq ij}J_{ik}s_{k}+h_{i}\right)+J_{ij}s_{i}s_{j}+s_{j}\left(\sum_{k\neq ij}J_{jk}s_{k}+h_{j}\right)}}{Z_{ij}}=\frac{e^{H_{i}(s_{\backslash ij})s_{i}+J_{ij}s_{i}s_{j}+H_{j}(s_{\backslash ij})s_{j}}}{Z_{ij}},\,\,\,1\le i<j\le N\label{eq:2ps}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where we defined the effective total field acting on site 
+\begin_inset Formula $i$
+\end_inset
+
+ (resp.
+ 
+\begin_inset Formula $j)$
+\end_inset
+
+ minus the contribuition of site 
+\begin_inset Formula $j$
+\end_inset
+
+ (resp.
+ 
+\begin_inset Formula $i$
+\end_inset
+
+) as 
+\begin_inset Formula $H_{i}(s_{\backslash ij}):=\sum_{k\neq ij}J_{ik}s_{k}+h_{i}$
+\end_inset
+
+ (resp.
+ 
+\begin_inset Formula $H_{j}(s_{\backslash ij}):=\sum_{k\neq ij}J_{jk}s_{k}+h_{j}$
+\end_inset
+
+) and 
+\begin_inset Formula $Z_{ij}$
+\end_inset
+
+ is the normalization defined as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Z_{ij} & = & 4\left(\cosh(H_{i}(s_{\setminus ij}))\cosh(J_{ij})\cosh(H_{j}(s_{\setminus ij}))+\sinh(H_{i}(s_{\setminus ij}))\sinh(J_{ij})\sinh(H_{j}(s_{\setminus ij}))\right)\\
+ & = & 4\cosh(H_{i}(s_{\setminus ij}))\cosh(J_{ij})\cosh(H_{j}(s_{\setminus ij}))\left(1+\tanh(H_{i}(s_{\setminus ij}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}))\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The log pseudolikelihood is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+L_{ij} & = & \sum_{\mu=1}^{M}[H_{i}(s_{\backslash ij}^{\mu})s_{i}^{\mu}+J_{ij}s_{i}^{\mu}s_{j}^{\mu}+H_{j}(s_{\backslash ij}^{\mu})s_{j}^{\mu}-\log\left(1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))\right)+\dots\\
+ &  & \dots-\log\left(\cosh(H_{i}(s_{\setminus ij}))\cosh(J_{ij})\cosh(H_{j}(s_{\setminus ij}))\right)-\log(4)]
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The gradient is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial L_{ij}}{\partial h_{i}} & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}-\frac{\left(1-\tanh^{2}(H_{i}(s_{\setminus ij}^{\mu})\right)\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}-\tanh(H_{i}(s_{\setminus ij}^{\mu}))\right]\\
+ & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}-\frac{\tanh(H_{i}(s_{\setminus ij}^{\mu})+\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}\right]\\
+\frac{\partial L_{ij}}{\partial h_{j}} & = & \sum_{\mu=1}^{M}\left[s_{j}^{\mu}-\frac{\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\left(1-\tanh^{2}(H_{j}(s_{\setminus ij}^{\mu})\right)}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}-\tanh(H_{j}(s_{\setminus ij}^{\mu}))\right]\\
+ & = & \sum_{\mu=1}^{M}\left[s_{j}^{\mu}-\frac{\tanh(H_{j}(s_{\setminus ij}^{\mu})+\tanh(J_{ij})\tanh(H_{i}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}\right]\\
+\frac{\partial L_{ij}}{\partial J_{ij}} & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}s_{j}^{\mu}-\frac{\tanh(H_{i}(s_{\setminus ij}^{\mu}))\left(1-\tanh^{2}(J_{ij})\right)\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}-\tanh(J_{ij})\right]\\
+ & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}s_{j}^{\mu}-\frac{\tanh(J_{ij})+\tanh(H_{j}(s_{\setminus ij}^{\mu}))\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}\right]\\
+\frac{\partial L_{ij}}{\partial J_{ik}} & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}s_{k}^{\mu}-\frac{s_{k}^{\mu}\left(1-\tanh^{2}(H_{i}(s_{\setminus ij}^{\mu}))\right)\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}-s_{k}^{\mu}\tanh(H_{i}(s_{\setminus ij}^{\mu}))\right]\\
+ & = & \sum_{\mu=1}^{M}\left[s_{i}^{\mu}s_{k}^{\mu}-s_{k}^{\mu}\frac{\tanh(H_{i}(s_{\setminus ij}^{\mu})+\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}\right]\,\,\,\,\,k\neq ij\\
+\frac{\partial L_{ij}}{\partial J_{jk}} & = & \sum_{\mu=1}^{M}\left[s_{j}^{\mu}s_{k}^{\mu}-\frac{s_{k}^{\mu}\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\left(1-\tanh^{2}(H_{j}(s_{\setminus ij}^{\mu}))\right)}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}-s_{k}^{\mu}\tanh(H_{j}(s_{\setminus ij}^{\mu}))\right]\\
+ & = & \sum_{\mu=1}^{M}\left[s_{j}^{\mu}s_{k}^{\mu}-s_{k}^{\mu}\frac{\tanh(H_{j}(s_{\setminus ij}^{\mu})+\tanh(J_{ij})\tanh(H_{i}(s_{\setminus ij}^{\mu}))}{1+\tanh(H_{i}(s_{\setminus ij}^{\mu}))\tanh(J_{ij})\tanh(H_{j}(s_{\setminus ij}^{\mu}))}\right]\,\,\,\,\,k\neq ij
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that for each pair 
+\begin_inset Formula $i,j$
+\end_inset
+
+ we 
+\begin_inset Formula $L_{ij}$
+\end_inset
+
+ is a function of 
+\begin_inset Formula $2N-1$
+\end_inset
+
+ variables: 2 fields (
+\begin_inset Formula $h_{i},$
+\end_inset
+
+
+\begin_inset Formula $h_{j})$
+\end_inset
+
+ + 
+\begin_inset Formula $2(N-2)$
+\end_inset
+
+
+\begin_inset Formula $+1$
+\end_inset
+
+ couplings (
+\begin_inset Formula $J_{ik},J_{jk}$
+\end_inset
+
+ for 
+\begin_inset Formula $k\neq ij$
+\end_inset
+
+ pluds 
+\begin_inset Formula $J_{ij}$
+\end_inset
+
+).
+\end_layout
+
+\end_body
+\end_document
