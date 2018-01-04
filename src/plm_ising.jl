@@ -1,5 +1,5 @@
 #!/usr/bin/env /Users/pagnani/julia-0.6/julia
-include(joinpath(dirname(@__FILE__), "../src/PlmIsing.jl"))
+@everywhere include(joinpath(dirname(@__FILE__), "../src/PlmIsing.jl"))
 using .PlmIsing
 function main()
     if length(ARGS) == 2     

@@ -42,4 +42,7 @@ Script
 The inference can be also run with the `plm_ising.jl` script. To use
 it, just run from the shell: ``julia PATH-TO-PACKAGE/src/plm_ising.jl
 --in=infile --ou=outfile`` where `infile` is a file containing the
-Ising spin configurations (see above).
+Ising spin configurations (see above). Note that the script can be run
+in parallel just with
+``$ julia -p nproc plm_ising.jl --in=input.dat  --ou=output.dat``
+where ``nproc`` is the number of cores.
