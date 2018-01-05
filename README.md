@@ -39,8 +39,12 @@ julia> Pkg.add("ExtractMacro")
 Script
 ------
 
-The inference can be also run with the `plm_ising.jl` script. To use
-it, just run from the shell:
+The inference can be also run with the `plm_ising.jl` script. It requires the installation of the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
+```
+julia> Pkg.add("ArgParse")
+julia> Pkg.checkout("ArgParse")
+```
+To use it, just run from the shell:
 
 ```
 $ julia PATH-TO-PACKAGE/src/plm_ising.jl --in=infile --ou=outfile
