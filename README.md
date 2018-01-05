@@ -47,10 +47,10 @@ julia> Pkg.checkout("ArgParse")
 To use it, just run from the shell:
 
 ```
-$ julia PATH-TO-PACKAGE/src/plm_ising.jl --in=infile --ou=outfile
+$ julia PATH-TO-PACKAGE/src/plm_ising.jl infile outfile
 ```
 where `infile` is a file containing the Ising spin configurations (see above). Note that the script can be run in parallel just with
 ```
-$ julia -p nproc PATH-TO-PACKAGE/src/plm_ising.jl --in=input.dat  --ou=output.dat
+$ julia -p nproc PATH-TO-PACKAGE/src/plm_ising.jl infile outfile
 ```
-where `nproc` is the (integer) number of cores.
+where `nproc` is the (integer) number of cores. 
