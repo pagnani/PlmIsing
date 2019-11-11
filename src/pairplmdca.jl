@@ -67,18 +67,18 @@ end
 function maximize2plmdca(alg::PlmAlg, var::PlmVar)
 
     @extract var M N lambdaJ lambdaH spin
-    @extract alg method verbose epsconv maxit maxeval 
+    @extract alg method verbose epsconv maxit maxeval
 
     vecps = SharedArray{Float64}(N*(N-1)>>1)
     ctr = 0
     pairs = Array{NTuple{2,Int},1}()
     for i=1:N-1,j=i+1:N push!(pairs,(i,j)) end
-    J0,H0=fill(0.0,N,N),fill(0.0,N) 
-    Jscra = @parallel hcat for p in pairs
+    J0,H0=fill(0.0,N,N),fill(0.0,N)
+    Jscra = @distributed hcat for p in pairs
         si = p[1]
         sj = p[2]
         ctr += 1
-#        f(x::Vector,g::Vector)=pairplmsitegrad!(x,g,si,sj,var)                  
+#        f(x::Vector,g::Vector)=pairplmsitegrad!(x,g,si,sj,var)
         x0 = computeX0(J0,H0,si,sj)
         opt = Opt(method,2N-1)
         ftol_abs!(opt, alg.epsconv)
@@ -89,18 +89,18 @@ function maximize2plmdca(alg::PlmAlg, var::PlmVar)
         alg.verbose && @printf("pair %d %d\t pll = %.4f\t time(s) = %.4f\t", si, sj, maxf, elapsedtime)
         alg.verbose && println("exit status = $ret")
         vecps[ctr] = maxf
-        maxJH            
+        maxJH
     end
     DJ,DH,outJ,outH = unpackpair(Jscra,N)
     return DJ,DH,outJ,outH, vecps
 end
 
 function computeHpair(vecJ::Vector{Float64}, si::Int, sj::Int, a::Int, spin::DenseArray{Float64,2}, N::Int)
-    @inbounds begin 
+    @inbounds begin
         Hi = vecJ[end-1]
         Hj = vecJ[end]
         ctr = 0
-        # begin hi    
+        # begin hi
         for i=1:si-1
             ctr += 1
             Hi += vecJ[ctr] * spin[i,a]
@@ -113,9 +113,9 @@ function computeHpair(vecJ::Vector{Float64}, si::Int, sj::Int, a::Int, spin::Den
             ctr += 1
             Hi += vecJ[ctr] * spin[i,a]
         end
-        
+
 # end Hi
-        
+
         for i=1:si-1
             ctr += 1
             Hj += vecJ[ctr] * spin[i,a]
@@ -137,12 +137,12 @@ function L2norm_pair(v::Vector, var::PlmVar)
     mysum = 0
     for i=1:2N-3
         mysum += v[i]^2
-    end       
+    end
     return lambdaJ*mysum + lambdaH*(v[end-1]^2 + v[end]^2)
 end
 
 @inline function computelogZ(Hi::Float64, Jij::Float64, Hj::Float64)
-    Lcosh = log(cosh(Hi)) + log(cosh(Jij)) + log(cosh(Hj))  
+    Lcosh = log(cosh(Hi)) + log(cosh(Jij)) + log(cosh(Hj))
     Ltanh = log(1.0 + tanh(Hi)* tanh(Jij) * tanh(Hj))
     return Lcosh + Ltanh + log(4.0)
 end
@@ -154,15 +154,15 @@ function gradpair!(grad::Vector{Float64}, spin::Matrix{Float64}, N::Int, Hi::Flo
     thHj  = tanh(Hj)
     thJij = tanh(Jij)
 
-    
-    
+
+
     den   = 1.0 + thHi*thJij*thHj
     num1  = thHi + thJij * thHj
     num2  = thHj + thJij * thHi
     frac1 = num1 / den
     frac2 = num2 / den
-    
-    
+
+
     @inbounds begin
         for i=1:si-1
             ctr += 1
@@ -176,7 +176,7 @@ function gradpair!(grad::Vector{Float64}, spin::Matrix{Float64}, N::Int, Hi::Flo
             ctr += 1
         grad[ctr] += spin[si,a]*spin[i,a] - spin[i,a]*frac1
         end
-        
+
         for i=1:si-1
             ctr += 1
             grad[ctr] += spin[sj,a]*spin[i,a] - spin[i,a]*frac2
@@ -196,7 +196,7 @@ function gradpair!(grad::Vector{Float64}, spin::Matrix{Float64}, N::Int, Hi::Flo
     end
 end
 function pairplmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, si::Int, sj::Int, var::PlmVar)
-    @extract var M N lambdaJ lambdaH 
+    @extract var M N lambdaJ lambdaH
     spin = sdata(var.spin)
     pl = 0.0
     Jij = vecJ[end-2]
@@ -207,13 +207,13 @@ function pairplmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, si::Int,
     grad[end-1] = 2.0 * lambdaH * vecJ[end-1] * M
     grad[end  ] = 2.0 * lambdaH * vecJ[end  ] * M
 
-    
+
     @inbounds for a=1:M
-        Hi, Hj = computeHpair(vecJ, si, sj, a, spin, N)        
-        pl += Hi * spin[si,a] + Jij * spin[si,a] * spin[sj,a] + Hj * spin[sj,a] - computelogZ(Hi,Jij,Hj)        
+        Hi, Hj = computeHpair(vecJ, si, sj, a, spin, N)
+        pl += Hi * spin[si,a] + Jij * spin[si,a] * spin[sj,a] + Hj * spin[sj,a] - computelogZ(Hi,Jij,Hj)
         gradpair!(grad,spin,N, Hi,Jij,Hj, si, sj, a)
     end
-    
+
     scale!(grad,1.0/M)
     pl /= M
     pl += L2norm_pair(vecJ, var)

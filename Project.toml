@@ -1,0 +1,11 @@
+name = "PlmIsing"
+uuid = "990a883c-047f-11ea-26cc-839ba287877a"
+author = ["Andrea Pagnani <andrea.pagnani@gmail.com>"]
+
+[deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+ExtractMacro = "f86d3d12-fd5b-522c-99e9-61577282a1e9"
+NLopt = "76087f3c-5699-56af-9a33-bf431cd00edd"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+SharedArrays = "1a1011a3-84de-559e-8e89-a11a2f7dc383"

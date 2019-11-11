@@ -17,8 +17,8 @@ function isingplmdca(filename::AbstractString;
 end
 
 function optimfunwrapper(x::Vector, g::Vector, site, var)
-    g === nothing && (g = zeros(Float64, length(x)))    
-    return plmsitegrad!(x, g, site,  var)   
+    g === nothing && (g = zeros(Float64, length(x)))
+    return plmsitegrad!(x, g, site,  var)
 end
 
 
@@ -28,7 +28,7 @@ function maximizeplmdca(alg::PlmAlg, var::PlmVar)
     @extract alg method verbose epsconv maxit maxeval
     vecps = SharedArray{Float64}(N)
     x0 = fill(0.0,N)
-    Jscra = @parallel hcat for i in 1:N
+    Jscra = @distributed hcat for i in 1:N
         opt = Opt(method,N)
         ftol_abs!(opt, alg.epsconv)
         maxeval!(opt, maxit)
@@ -38,7 +38,7 @@ function maximizeplmdca(alg::PlmAlg, var::PlmVar)
         alg.verbose && println("exit status = $ret")
         #alg.verbose && println(maxJH[end-2], " ",maxJH[end-1]," ", maxJH[end], " ", mean(maxJH[1:2N-3]))
         vecps[i] = maxf
-        maxJH          
+        maxJH
     end
     outJ,outh = unpack(Jscra)
     return outJ, outh, vecps
@@ -55,7 +55,7 @@ function computeH(vecJ::Vector{Float64}, site::Int, spin, a::Int,  N::Int)
     for i=site+1:N
         ctr += 1
         Hi += vecJ[ctr] * spin[i,a]
-    end        
+    end
     return Hi
 end
 
@@ -66,8 +66,8 @@ function L2norm(v::Vector, var::PlmVar)
     mysum = 0
     for i=1:N-1
         mysum += v[i]^2
-    end       
-    return -lambdaJ*mysum - lambdaH*v[end]^2  
+    end
+    return -lambdaJ*mysum - lambdaH*v[end]^2
 end
 
 function grad!(grad::Vector{Float64}, spin, N::Int, Hi::Float64, site::Int, a::Int)
@@ -78,8 +78,8 @@ function grad!(grad::Vector{Float64}, spin, N::Int, Hi::Float64, site::Int, a::I
     if exponent < 500.0
         factor = 2.0 * spin[site,a] * exp(exponent) / (1.0 + exp(exponent))
     end
-    
-    ctr = 0    
+
+    ctr = 0
     for i=1:site-1
         ctr += 1
         grad[ctr] += spin[i,a] * factor
@@ -92,7 +92,7 @@ function grad!(grad::Vector{Float64}, spin, N::Int, Hi::Float64, site::Int, a::I
 end
 
 function plmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, site::Int, var::PlmVar)
-    @extract var M N lambdaJ lambdaH 
+    @extract var M N lambdaJ lambdaH
 
     spin = sdata(var.spin)
     pl = 0.0
@@ -103,7 +103,7 @@ function plmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, site::Int, v
     grad[N] += -2 * lambdaH * vecJ[N] * M
 
     @inbounds for a=1:M
-        Hi = computeH(vecJ, site, spin, a, N)        
+        Hi = computeH(vecJ, site, spin, a, N)
         exponent = -2.0*spin[site,a]*Hi
         plterm = -exponent
         if exponent < 700.0
@@ -112,8 +112,8 @@ function plmsitegrad!(vecJ::Vector{Float64}, grad::Vector{Float64}, site::Int, v
 
         pl += plterm
         grad!(grad, spin, N, Hi, site, a)
-    end    
-    scale!(grad, 1.0/M )
+    end
+    grad .=  grad ./ M
     pl /= M
     pl += L2norm(vecJ, var)
     return pl
