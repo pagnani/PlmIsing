@@ -26,7 +26,7 @@ can be run on multiple cores previous ``addprocs(nprocs)`` where
 Install
 -------
 It requires the installation of:
-   
+
 * [NLopt.jl](https://github.com/JuliaOpt/NLopt.jl).
 ```
 julia> Pkg.add("NLopt")
@@ -39,11 +39,26 @@ julia> Pkg.add("ExtractMacro")
 Script
 ------
 
-The inference can be also run with the `plm_ising.jl` script. It requires the installation of the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
+The inference can be also run with the `plm_ising.jl` script. It requires the installation of:
+
+1. the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
 ```
 julia> Pkg.add("ArgParse")
 julia> Pkg.checkout("ArgParse")
 ```
+
+2. NLopt (as a general package not as a dependency):
+```
+julia> Pkg.add("NLopt")
+```
+
+3. ExtractMacro (as a general package not as a dependency):
+```
+julia> Pkg.add("ExtractMacro")
+
+```
+
+
 To use it, just run from the shell:
 
 ```
@@ -53,4 +68,4 @@ where `infile` is a file containing the Ising spin configurations (see above). N
 ```
 $ julia -p nproc PATH-TO-PACKAGE/src/plm_ising.jl infile outfile
 ```
-where `nproc` is the (integer) number of cores. 
+where `nproc` is the (integer) number of cores.

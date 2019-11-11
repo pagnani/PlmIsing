@@ -3,7 +3,7 @@
 @everywhere include(joinpath(dirname(@__FILE__), "../src/PlmIsing.jl"))
 using .PlmIsing
 using ArgParse
-
+using DelimitedFiles
 function main()
 
 
@@ -36,12 +36,12 @@ function main()
         required = true
         "fileout"
         help = "output filename in compact format (N x N matrix. The diagonal is filled with fields)\n"
-        required = true        
+        required = true
     end
 
 
 
-    
+
     parsed_args = parse_args(ARGS, s)
     lambdaJ = parsed_args["lambdaJ"]
     lambdaH = parsed_args["lambdaH"]
@@ -51,9 +51,9 @@ function main()
     filein = parsed_args["filein"]
     fileout = parsed_args["fileout"]
 
-    
+
     filein == fileout && error("cowardly refusing to overwrite input file = $filein")
-    
+
     res = PlmIsing.isingplmdca(filein,
                       lambdaJ=lambdaJ,
                       lambdaH=lambdaH,
@@ -68,6 +68,6 @@ function main()
         J[i,i] = H[i]
     end
 
-    writedlm(fileout,J)    
+    writedlm(fileout,J)
 end
 main()
