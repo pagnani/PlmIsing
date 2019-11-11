@@ -68,3 +68,9 @@ where `infile` is a file containing the Ising spin configurations (see above). N
 $ julia -p nproc PATH-TO-PACKAGE/src/plm_ising.jl infile outfile
 ```
 where `nproc` is the (integer) number of cores.
+
+Versions
+--------
+
+Version 0.1.0 works with julia v0.6
+Version 0.2.0 works with julia v1.0, v1.1, v1.2
