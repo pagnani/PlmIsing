@@ -41,18 +41,18 @@ Script
 
 The inference can be also run with the `plm_ising.jl` script. It requires the installation of:
 
-1. the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
+* the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
 ```
 julia> Pkg.add("ArgParse")
 julia> Pkg.checkout("ArgParse")
 ```
 
-2. NLopt (as a general package not as a dependency):
+* NLopt (as a general package not as a dependency):
 ```
 julia> Pkg.add("NLopt")
 ```
 
-3. ExtractMacro (as a general package not as a dependency):
+* ExtractMacro (as a general package not as a dependency):
 ```
 julia> Pkg.add("ExtractMacro")
 
