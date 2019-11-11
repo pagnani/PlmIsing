@@ -1,6 +1,7 @@
 name = "PlmIsing"
 uuid = "990a883c-047f-11ea-26cc-839ba287877a"
 author = ["Andrea Pagnani <andrea.pagnani@gmail.com>"]
+version = "0.2.0"
 
 [deps]
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
