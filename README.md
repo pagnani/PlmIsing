@@ -58,7 +58,6 @@ julia> Pkg.add("ExtractMacro")
 
 ```
 
-
 To use it, just run from the shell:
 
 ```
