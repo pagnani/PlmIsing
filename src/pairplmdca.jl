@@ -1,4 +1,4 @@
-function pairplmdca(filename::AbstractString;
+function pairplmdca(spin::Matrix{Int};
                     lambdaJ::Real=0.005,
                     lambdaH::Real=0.01,
                     epsconv::Real=1.0e-5,
@@ -7,12 +7,18 @@ function pairplmdca(filename::AbstractString;
                     verbose::Bool=true,
                     method::Symbol=:LD_LBFGS)
 
-    spin = readdlm(filename)
+
     N,M = size(spin)
     plmalg = PlmAlg(method, verbose, epsconv, maxit, maxeval)
     plmvar = PlmVar(M, N, lambdaJ, lambdaH, spin)
     DJ, DH,outJ,outH, pslike = maximize2plmdca(plmalg,plmvar)
     PairPlmOut(sdata(pslike),DJ,DH, outJ, outH)
+end
+
+
+function pairplmdca(filename::AbstractString; kwds...)
+    spin = readdlm(filename,Int)
+    pairplmdca(spin::Matrix{Int},kwds...)
 end
 
 function computeX0(J0::Matrix{Float64}, H0::Vector{Float64}, si::Int, sj::Int)

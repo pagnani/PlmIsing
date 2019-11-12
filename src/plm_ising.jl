@@ -54,7 +54,7 @@ function main()
 
     filein == fileout && error("cowardly refusing to overwrite input file = $filein")
 
-    res = PlmIsing.isingplmdca(filein,
+    res = PlmIsing.isingplm(filein,
                       lambdaJ=lambdaJ,
                       lambdaH=lambdaH,
                       epsconv=epsconv,
