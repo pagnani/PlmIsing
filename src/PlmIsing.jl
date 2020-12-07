@@ -11,5 +11,5 @@ export isingplm, PlmOut
 include("types.jl")
 include("utils.jl")
 include("isingplm.jl")
-include("pairplmdca.jl")
+# include("pairplmdca.jl") # is not working right no
 end #end module

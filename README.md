@@ -1,6 +1,10 @@
 PseudoLikelihood Maximization for Ising Model
 =============================================
 
+| **Documentation**                       | **Build Status**                                                                                | **Coverage** |
+|:---------------------------------------:|:-----------------------------------------------------------------------------------------------:|:------------:|
+| [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://pagnani.github.io/PlmIsing/dev) | [![Build Status](https://travis-ci.com/pagnani/PlmIsing.svg?branch=master)](https://travis-ci.com/pagnani/PlmIsing) [![Build status](https://ci.appveyor.com/api/projects/status/ug0kr4hunm5wn163?svg=true)](https://ci.appveyor.com/project/pagnani/PlmIsing) | [![codecov](https://codecov.io/gh/pagnani/PlmIsing/branch/master/graph/badge.svg)](https://codecov.io/gh/pagnani/PlmIsing) |
+
 ``out=isingplmdca("nomefile",kwds...)`` compute standard pseudolikelihood on data stored in `nomefile` file. Data should be a `N x M` formatted file of `M` configurations of `N` spins.
 
 Returns ``out`` of type ``PlmOut`` with 3 fields:

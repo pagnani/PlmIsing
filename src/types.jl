@@ -26,9 +26,12 @@ struct PlmVar
     lambdaJ::Float64
     lambdaH::Float64
     spin::SharedArray{Float64,2}
-    function PlmVar(M,N,lambdaJ,lambdaH,spin)
+    W::SharedArray{Float64,1}
+    function PlmVar(M,N,lambdaJ,lambdaH,spin,W)         
         s = SharedArray{Float64}(size(spin))
+        w = SharedArray{Float64}(size(W))
         s[:] = spin
-        new(M,N,lambdaJ,lambdaH,s)
+        w[:] = W
+        new(M,N,lambdaJ,lambdaH,s,w)
     end
 end

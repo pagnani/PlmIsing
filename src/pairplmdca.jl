@@ -1,4 +1,4 @@
-function pairplmdca(spin::Matrix{Int};
+function pairplmdca(spin::Matrix{Int},W::Vector;
                     lambdaJ::Real=0.005,
                     lambdaH::Real=0.01,
                     epsconv::Real=1.0e-5,
@@ -7,10 +7,12 @@ function pairplmdca(spin::Matrix{Int};
                     verbose::Bool=true,
                     method::Symbol=:LD_LBFGS)
 
-
     N,M = size(spin)
+    length(W) == M || throw(DimensionMismatch("incompatible weigth vector length"))
+    all(x->x>0,W) || throw(DomainError("vector W should normalized and with all positive elements"))
+    isapprox(sum(W),1) || throw(DomainError("sum(W) ≠ 1. Consider normalizing the vector W"))
     plmalg = PlmAlg(method, verbose, epsconv, maxit, maxeval)
-    plmvar = PlmVar(M, N, lambdaJ, lambdaH, spin)
+    plmvar = PlmVar(M, N, lambdaJ, lambdaH, spin,W)
     DJ, DH,outJ,outH, pslike = maximize2plmdca(plmalg,plmvar)
     PairPlmOut(sdata(pslike),DJ,DH, outJ, outH)
 end
@@ -18,7 +20,7 @@ end
 
 function pairplmdca(filename::AbstractString; kwds...)
     spin = readdlm(filename,Int)
-    pairplmdca(spin::Matrix{Int},kwds...)
+    pairplmdca(spin::Matrix{Int},ones(size(spin,2))/size(spin,2); kwds...)
 end
 
 function computeX0(J0::Matrix{Float64}, H0::Vector{Float64}, si::Int, sj::Int)
