@@ -1,0 +1,6 @@
+.vscode/settings.json
+*~
+.*.swp
+test/*~
+src/*~
+.vscode/*
