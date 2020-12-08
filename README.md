@@ -5,7 +5,8 @@ PseudoLikelihood Maximization for Ising Model
 |:---------------------------------------:|:-----------------------------------------------------------------------------------------------:|:------------:|
 | [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://pagnani.github.io/PlmIsing/dev) | [![Build Status](https://travis-ci.com/pagnani/PlmIsing.svg?branch=master)](https://travis-ci.com/pagnani/PlmIsing) [![Build status](https://ci.appveyor.com/api/github/webhook?id=cyq9kwo8w2bpdgys)](https://ci.appveyor.com/project/pagnani/plmising) | [![codecov](https://codecov.io/gh/pagnani/PlmIsing/branch/master/graph/badge.svg)](https://codecov.io/gh/pagnani/PlmIsing) |
 
-``out=isingplmdca("nomefile",kwds...)`` compute standard pseudolikelihood on data stored in `nomefile` file. Data should be a `N x M` formatted file of `M` configurations of `N` spins.
+The package compute the standard pseudolikelihood optimization on pairwise spin systems (Ising). 
+The method exported is ``out=isingplmdca("nomefile",kwds...)`` analyzes data stored in `nomefile` file. Data should be a `N x M` formatted file of `M` configurations of `N` spins.
 
 Returns ``out`` of type ``PlmOut`` with 3 fields:
 
@@ -29,15 +30,21 @@ can be run on multiple cores previous ``addprocs(nprocs)`` where
 
 Install
 -------
-It requires the installation of:
-
-* [NLopt.jl](https://github.com/JuliaOpt/NLopt.jl).
+The package is not yet registered. To use it, clone the repository locally:
 ```
-julia> Pkg.add("NLopt")
+> git clone https://github.com/pagnani/PlmIsing.git
 ```
-* [ExtractMacro.jl](https://github.com/carlobaldassi/ExtractMacro.jl)
+Then `cd` into the `PlmIsing` directory, and  from the julia REPL do a 
 ```
-julia> Pkg.add("ExtractMacro")
+(PlmIsing) pkg> activate .
+(PlmIsing) pkg> resolve
+```
+If you want to use it in parallel start julia with `julia -p nprocs` where `nprocs` is the number of process 
+you want to use. Then from julia REPL
+```
+julia> @everywhere using Pkg
+julia> @everywhere Pkg.activate(".")
+julia> @everywhere using PlmIsing
 ```
 
 Script
@@ -45,21 +52,9 @@ Script
 
 The inference can be also run with the `plm_ising.jl` script. It requires the installation of:
 
-* the development version of [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
+* [ArgParse.jl](https://github.com/carlobaldassi/ArgParse.jl):
 ```
 julia> Pkg.add("ArgParse")
-julia> Pkg.checkout("ArgParse")
-```
-
-* NLopt (as a general package not as a dependency):
-```
-julia> Pkg.add("NLopt")
-```
-
-* ExtractMacro (as a general package not as a dependency):
-```
-julia> Pkg.add("ExtractMacro")
-
 ```
 
 To use it, just run from the shell:
@@ -78,3 +73,4 @@ Versions
 
 Version 0.1.0 works with julia v0.6
 Version 0.2.0 works with julia v1.0, v1.1, v1.2
+Version 0.3.0 works with julia from v1.0 ... v1.5.*
