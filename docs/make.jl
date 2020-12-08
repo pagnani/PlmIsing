@@ -1,4 +1,4 @@
-using Documenter, PottsGauge
+using Documenter, PlmIsing
 
 push!(LOAD_PATH,"../src/")
 makedocs(sitename = "PlmIsing",
