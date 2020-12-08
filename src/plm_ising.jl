@@ -1,12 +1,10 @@
-#!/usr/bin/env /Users/pagnani/julia-0.6/julia
-
-@everywhere include(joinpath(dirname(@__FILE__), "../src/PlmIsing.jl"))
-using .PlmIsing
 using ArgParse
 using DelimitedFiles
+using Distributed
+@everywhere using Pkg   
+@everywhere Pkg.activate(joinpath(dirname(@__FILE__),".."))
+@everywhere using PlmIsing
 function main()
-
-
     validmethods = ["LD_MMA", "LD_SLSQP", "LD_LBFGS", "LD_TNEWTON_PRECOND", "LD_TNEWTON_PRECOND_RESTART", "LD_TNEWTON", "LD_VAR2", "LD_VAR1"]
     s = ArgParseSettings("Ising PlmDCA inference algorithm.")
     @add_arg_table s begin
@@ -20,7 +18,7 @@ function main()
         help = """coupling H regularization"""
         "--epsconv", "-e"
         arg_type = Float64
-        default = 1e-5
+        default = 1e-20
         help = """convergence criterion for the algorithm"""
         "--maxit"
         arg_type = Int
