@@ -67,7 +67,7 @@ end
 
 for n in 4:12
     for it in 1:5
-        test_isingplm(n;lambdaJ=0,lambdaH=0,epsconv=1e-50,verbose=false,epstest=1e-6)
+        test_isingplm(n;lambdaJ=0,lambdaH=0,epsconv=1e-50,verbose=false,epstest=1e-5)
     end
 end
 
